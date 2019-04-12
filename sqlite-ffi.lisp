@@ -1,6 +1,7 @@
 (defpackage :sqlite-ffi
   (:use :cl :cffi)
-  (:export :error-code
+  (:export :load-library
+           :error-code
            :p-sqlite3
            :sqlite3-open
            :sqlite3-close
@@ -39,8 +40,11 @@
   (:unix (:or "libsqlite3.so.0" "libsqlite3.so"))
   (t (:or (:default "libsqlite3") (:default "sqlite3"))))
 
-(unless (member :cl-sqlite-foreign-libs-already-loaded *features*)
+(defun load-library ()
   (use-foreign-library sqlite3-lib))
+
+(unless (member :cl-sqlite-foreign-libs-already-loaded *features*)
+  (load-library))
 
 (defcenum error-code
   (:OK 0)
